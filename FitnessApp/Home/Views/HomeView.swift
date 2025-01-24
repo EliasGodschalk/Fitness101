@@ -7,22 +7,9 @@
 
 import SwiftUI
 
-
-
 struct HomeView: View {
     
-    @State private var calories: Int = 123
-    @State private var active: Int = 50
-    @State private var stand: Int = 8
-    
-    var mockActivities: [Activity] = [
-        .example1, .example2, .example3, .example4
-    ]
-    
-    
-    var mockWorkouts: [Workout] = [
-        .example1, .example2, .example3, .example4
-    ]
+    @State var viewModel = HomeViewModel()
     
     var body: some View {
         NavigationStack {
@@ -34,13 +21,13 @@ struct HomeView: View {
                     
                     HStack {
                         Spacer()
-                        VStack {
+                        VStack(alignment: .leading) {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Calories")
                                     .font(.callout.bold())
                                     .foregroundStyle(.red)
                                 
-                                Text("123 kcal")
+                                Text("\(viewModel.calories)")
                                     .bold()
                             }
                             .padding(.bottom)
@@ -49,7 +36,7 @@ struct HomeView: View {
                                     .font(.callout.bold())
                                     .foregroundStyle(.green)
                                 
-                                Text("52 mins")
+                                Text("\(viewModel.active)")
                                     .bold()
                             }
                             .padding(.bottom)
@@ -58,16 +45,16 @@ struct HomeView: View {
                                     .font(.callout.bold())
                                     .foregroundStyle(.blue)
                                 
-                                Text("8 hours")
+                                Text("\(viewModel.stand)")
                                     .bold()
                             }
                         }
                         Spacer()
                         ZStack {
-                            ProgressCircleView(progress: $calories, goal: 600, color: .red)
-                            ProgressCircleView(progress: $active, goal: 60, color: .green)
+                            ProgressCircleView(progress: $viewModel.calories, goal: 600, color: .red)
+                            ProgressCircleView(progress: $viewModel.active, goal: 60, color: .green)
                                 .padding(.all, 20)
-                            ProgressCircleView(progress: $stand, goal: 12, color: .blue)
+                            ProgressCircleView(progress: $viewModel.stand, goal: 12, color: .blue)
                                 .padding(.all, 40)
                         }
                         .padding(.horizontal)
@@ -93,7 +80,7 @@ struct HomeView: View {
                     .padding(.horizontal)
                     
                     LazyVGrid(columns: Array(repeating: GridItem(spacing: 20), count: 2)) {
-                        ForEach(mockActivities, id: \.id) { activity in
+                        ForEach(viewModel.mockActivities, id: \.id) { activity in
                             ActivityCard(activity: activity)
                         }
                     }
@@ -118,7 +105,7 @@ struct HomeView: View {
                     .padding(.top)
                     
                     LazyVStack {
-                        ForEach(mockWorkouts, id: \.id) { workout in
+                        ForEach(viewModel.mockWorkouts, id: \.id) { workout in
                             WorkoutCard(workout: workout)
                         }
                     }
